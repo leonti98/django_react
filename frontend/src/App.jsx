@@ -15,6 +15,7 @@ const ReginsterAndLogout = () => {
   localStorage.clear();
   return <Register to="/register" />;
 };
+
 const App = () => {
   return (
     <BrowserRouter>
