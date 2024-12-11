@@ -10,7 +10,7 @@ const Note = ({ note, onDelete }) => {
       <h3>{note.title}</h3>
       <p className="text-body">{note.content}</p>
       <p>{formattedDate}</p>
-      <button className="btn btn-info" onClick={() => onDelete(note.id)}>
+      <button className="btn btn-danger" onClick={() => onDelete(note.id)}>
         Delete
       </button>
     </div>

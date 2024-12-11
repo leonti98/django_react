@@ -3,11 +3,13 @@ import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import '../styles/Main.css';
+import LoadingIndicator from './LoadingIndicator';
 
 const Form = ({ route, method }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const name = method === 'login' ? 'Login' : 'Register';
@@ -26,8 +28,7 @@ const Form = ({ route, method }) => {
         navigate('/login');
       }
     } catch (error) {
-      alert(error.response.data.message);
-      console.error(error);
+      setMessage(error.response.data);
     } finally {
       setLoading(false);
     }
@@ -36,9 +37,15 @@ const Form = ({ route, method }) => {
     <div className="d-flex justify-content-center align-items-center vh-100">
       <form
         onSubmit={handleSubmit}
-        className="form-container border p-5 shadow-sm"
+        className="form-container border p-5 shadow-sm d-flex flex-column"
       >
         <h1>{name}</h1>
+        {Object.keys(message).map((key) => (
+          <p key={key} className="text-danger">
+            {key}: {message[key]}
+          </p>
+        ))}
+
         <div className="mb-3">
           <label htmlFor="username" className="form-lable">
             Username
@@ -65,9 +72,16 @@ const Form = ({ route, method }) => {
             placeholder="Password"
           />
         </div>
-        <button className="btn btn-primary" type="submit" disabled={loading}>
-          {name}
-        </button>
+        {loading && <LoadingIndicator />}
+        <div className="align-content-center">
+          <button
+            className="btn btn-primary btn"
+            type="submit"
+            disabled={loading}
+          >
+            {name}
+          </button>
+        </div>
       </form>
     </div>
   );
