@@ -58,14 +58,6 @@ const Home = () => {
   return (
     <div>
       <div className="container">
-        <h2>Notes</h2>
-        <div className=" row">
-          {notes.map((note) => (
-            <Note key={note.id} note={note} onDelete={deleteNote} />
-          ))}
-        </div>
-      </div>
-      <div className="container">
         <form
           onSubmit={createNote}
           className="form-container border p-4 shadow-sm"
@@ -85,6 +77,7 @@ const Home = () => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
+          <br />
           <div>
             <label htmlFor="form-content" className="form-lable">
               Content
@@ -98,10 +91,19 @@ const Home = () => {
               onChange={(e) => setContent(e.target.value)}
             />
           </div>
+          <br />
           <button type="submit" className="btn btn-primary">
             Create
           </button>
         </form>
+      </div>
+      <div className="container">
+        <h2>Notes</h2>
+        <div className="">
+          {notes.map((note) => (
+            <Note key={note.id} note={note} onDelete={deleteNote} />
+          ))}
+        </div>
       </div>
     </div>
   );

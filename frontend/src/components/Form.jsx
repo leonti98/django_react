@@ -22,6 +22,7 @@ const Form = ({ route, method }) => {
       if (method === 'login') {
         localStorage.setItem(ACCESS_TOKEN, response.data.access);
         localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+        localStorage.setItem('username', username);
         navigate('/');
       } else {
         alert('Registered successfully');

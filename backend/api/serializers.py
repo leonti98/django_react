@@ -15,9 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class NoteSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
+    def author_name(self, obj):
+        return obj.author.username
+
     class Meta:
         model = Note
-        fields = "__all__"
+        fields = "id, title, content, author, created_at".split(", ")
         read_only_fields = ["author"]
 
     def create(self, validated_data):
