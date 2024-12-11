@@ -22,5 +22,6 @@ class NoteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context["request"].user
+        validated_data.pop("author", None)  # Remove 'author' from validated_data
         note = Note.objects.create(author=user, **validated_data)
         return note
