@@ -1,7 +1,8 @@
+from rest_framework.response import Response
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer
+from .serializers import UserSerializer, NoteSerializer, LikeSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Note
 
@@ -35,3 +36,33 @@ class NoteDelete(generics.DestroyAPIView):
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user)
+
+
+# class to add and remove likes to a note
+class NoteLike(generics.UpdateAPIView):
+    http_method_names = ["put"]
+    serializer_class = LikeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.all()
+
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        user = self.request.user
+        if user in instance.likes.all():
+            instance.likes.remove(user)
+            liked = False
+        else:
+            instance.likes.add(user)
+            liked = True
+        response = {"liked": liked}
+        return response
+
+
+class CurrentUserView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        print("request", request)
+        return Response({"id": request.user.id})

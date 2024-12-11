@@ -16,13 +16,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
+    likes_count = serializers.SerializerMethodField()
 
     def author_name(self, obj):
         return obj.author.username
 
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+
     class Meta:
         model = Note
-        fields = "id, title, content, author, created_at".split(", ")
+        fields = "id, title, content, author, created_at, likes, likes_count".split(
+            ", "
+        )
         read_only_fields = ["author"]
 
     def create(self, validated_data):
@@ -30,3 +36,9 @@ class NoteSerializer(serializers.ModelSerializer):
         validated_data.pop("author", None)  # Remove 'author' from validated_data
         note = Note.objects.create(author=user, **validated_data)
         return note
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = []

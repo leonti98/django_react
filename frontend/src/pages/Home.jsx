@@ -7,10 +7,22 @@ const Home = () => {
   const [notes, setNotes] = useState([]);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
+  const [likeStatus, setLikeStatus] = useState(false);
 
   useEffect(() => {
     getNotes();
+    getUserID();
   }, []);
+
+  const getUserID = async () => {
+    api
+      .get('/api/auth/user/')
+      .then((response) => response.data)
+      .then((data) => {
+        localStorage.setItem('user_id', data.id);
+      })
+      .catch((error) => console.error(error));
+  };
 
   const getNotes = async () => {
     api
@@ -33,6 +45,21 @@ const Home = () => {
           console.error('Error');
         }
         getNotes();
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const likeNote = async (id) => {
+    api
+      .put(`/api/notes/like/${id}/`, {}) // Send an empty payload
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('Note liked');
+          setLikeStatus(!likeStatus); // Toggle likeStatus to trigger re-render
+          getNotes(); // Update notes data
+        } else {
+          console.error('Error');
+        }
       })
       .catch((error) => console.error(error));
   };
@@ -101,7 +128,13 @@ const Home = () => {
         <h2>Notes</h2>
         <div className="">
           {notes.map((note) => (
-            <Note key={note.id} note={note} onDelete={deleteNote} />
+            <Note
+              key={note.id}
+              note={note}
+              onDelete={deleteNote}
+              onLike={likeNote}
+              likeStatus={likeStatus} // Pass likeStatus as a prop
+            />
           ))}
         </div>
       </div>
