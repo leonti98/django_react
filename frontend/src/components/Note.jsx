@@ -2,6 +2,7 @@
 
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import { Link } from 'react-router-dom';
 TimeAgo.addDefaultLocale(en);
 
 const Note = ({ note, onDelete, onLike }) => {
@@ -56,7 +57,9 @@ const Note = ({ note, onDelete, onLike }) => {
   return (
     <div className="border m-2 p-4">
       <h3>{note.title}</h3>
-      <p className="text-muted">By: {note.author_username}</p>
+      <p className="text-muted">
+        By: <Link to={`/user/${note.author}`}>{note.author_username}</Link>
+      </p>
       <p className="text-body">{note.content}</p>
 
       <div className="d-flex justify-content-between align-items-baseline mt-5">
