@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../api';
 import '../styles/Main.css';
 import Note from '../components/Note';
+import ReactPaginate from 'react-paginate';
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
@@ -13,6 +14,7 @@ const Home = () => {
     getNotes();
     getUserID();
   }, []);
+  console.log(typeof notes);
 
   const getUserID = async () => {
     api
@@ -36,6 +38,12 @@ const Home = () => {
   };
 
   const deleteNote = async (id) => {
+    const confirmation = window.confirm(
+      'Are you sure you want to delete this note?'
+    );
+    if (!confirmation) {
+      return;
+    }
     api
       .delete(`/api/notes/delete/${id}/`)
       .then((res) => {
@@ -87,7 +95,7 @@ const Home = () => {
       <div className="container">
         <form
           onSubmit={createNote}
-          className="form-container border p-4 shadow-sm"
+          className="form-container border p-4 shadow-sm mt-3"
         >
           <h2 className=" text-center">Create a note</h2>
           <div>
@@ -124,6 +132,7 @@ const Home = () => {
           </button>
         </form>
       </div>
+      <br />
       <div className="container">
         <h2>Notes</h2>
         <div className="">
