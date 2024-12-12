@@ -9,24 +9,13 @@ const UserProfile = () => {
   const [username, setUsername] = useState('');
   const { user_id } = useParams();
 
-  const getUsername = async () => {
-    api
-      .get(`/api/auth/user/`)
-      .then((response) => {
-        setUsername(response.data.username);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
-    getUsername();
     api
       .get(`api/user/${user_id}/`)
       .then((response) => {
         console.log(response.data);
-        setNotes(response.data);
+        setNotes(response.data.notes);
+        setUsername(response.data.username);
       })
       .catch((error) => {
         console.log(error);
@@ -37,7 +26,7 @@ const UserProfile = () => {
     <div>
       <Navbar />
       <div className="container d-flex-column align-items-center justify-content-center">
-        <h1 className=" text-center">{username} Profile</h1>
+        <h1 className=" text-center">{username} Posts</h1>
         <div className="">
           {notes.map((note) => (
             <Note key={note.id} note={note} />

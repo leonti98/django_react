@@ -80,11 +80,5 @@ class UserNoteList(generics.ListAPIView):
     def get(self, request, user_id):
         queryset = self.get_queryset()
         serializer = NoteSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class GetUsername(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        return Response({"username": request.user.username})
+        user = User.objects.get(id=user_id)
+        return Response({"username": user.username, "notes": serializer.data})
