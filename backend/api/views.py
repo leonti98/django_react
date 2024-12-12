@@ -66,3 +66,25 @@ class CurrentUserView(generics.GenericAPIView):
     def get(self, request):
         print("request", request)
         return Response({"id": request.user.id, "username": request.user.username})
+
+
+# class to list notes of the any user
+class UserNoteList(generics.ListAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        user_id = self.kwargs["user_id"]
+        return Note.objects.filter(author=user_id).order_by("-created_at")
+
+    def get(self, request, user_id):
+        queryset = self.get_queryset()
+        serializer = NoteSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class GetUsername(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"username": request.user.username})

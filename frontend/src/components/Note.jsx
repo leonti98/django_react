@@ -56,6 +56,7 @@ const Note = ({ note, onDelete, onLike }) => {
   return (
     <div className="border m-2 p-4">
       <h3>{note.title}</h3>
+      <p className="text-muted">By: {note.author_username}</p>
       <p className="text-body">{note.content}</p>
 
       <div className="d-flex justify-content-between align-items-baseline mt-5">

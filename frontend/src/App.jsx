@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const Logout = () => {
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/register" element={<ReginsterAndLogout />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/user/:user_id" element={<UserProfile />} />
       </Routes>
     </BrowserRouter>
   );

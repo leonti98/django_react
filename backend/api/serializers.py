@@ -16,13 +16,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
+    author_username = serializers.SerializerMethodField()
+
+    def get_author_username(self, obj):
+        return obj.author.username
 
     def get_likes_count(self, obj):
         return obj.likes.count()
 
     class Meta:
         model = Note
-        fields = "id, title, content, author, created_at, likes, likes_count".split(
+        fields = "id, title, content, author, author_username, created_at, likes, likes_count".split(
             ", "
         )
         read_only_fields = ["author"]
