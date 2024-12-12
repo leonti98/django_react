@@ -65,4 +65,4 @@ class CurrentUserView(generics.GenericAPIView):
 
     def get(self, request):
         print("request", request)
-        return Response({"id": request.user.id})
+        return Response({"id": request.user.id, "username": request.user.username})

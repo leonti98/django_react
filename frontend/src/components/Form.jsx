@@ -22,7 +22,6 @@ const Form = ({ route, method }) => {
       if (method === 'login') {
         localStorage.setItem(ACCESS_TOKEN, response.data.access);
         localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-        localStorage.setItem('username', username);
         navigate('/');
       } else {
         alert('Registered successfully');
@@ -74,7 +73,14 @@ const Form = ({ route, method }) => {
           />
         </div>
         {loading && <LoadingIndicator />}
-        <div className="align-content-center">
+        <div className="align-content-center d-flex justify-content-around">
+          <button
+            className="btn btn-primary btn"
+            type="submit"
+            disabled={loading}
+          >
+            {name}
+          </button>
           <button
             className="btn btn-primary btn"
             type="submit"

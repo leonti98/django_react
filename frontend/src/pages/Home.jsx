@@ -3,6 +3,7 @@ import api from '../api';
 import '../styles/Main.css';
 import Note from '../components/Note';
 import ReactPaginate from 'react-paginate';
+import MyNavBar from '../components/NavBar';
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
@@ -15,16 +16,17 @@ const Home = () => {
 
   useEffect(() => {
     getNotes();
-    getUserID();
+    getUser();
   }, [currentPage]);
   console.log(typeof notes);
 
-  const getUserID = async () => {
+  const getUser = async () => {
     api
       .get('/api/auth/user/')
       .then((response) => response.data)
       .then((data) => {
         localStorage.setItem('user_id', data.id);
+        localStorage.setItem('username', data.username);
       })
       .catch((error) => console.error(error));
   };
@@ -99,6 +101,7 @@ const Home = () => {
 
   return (
     <div>
+      <MyNavBar />
       <div className="container">
         <form
           onSubmit={createNote}
