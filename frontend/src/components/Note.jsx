@@ -7,10 +7,10 @@ const Note = ({ note, onDelete, onLike }) => {
   console.log('==================================');
   console.log(
     "localStorage.getItem('user_id')",
-    typeof Number(localStorage.getItem('user_id'))
+    Number(localStorage.getItem('user_id'))
   );
-  console.log('note.likes', note.likes[0]);
-  if (note.author === localStorage.getItem('username')) {
+  console.log('note.author', note.author);
+  if (note.author === Number(localStorage.getItem('user_id'))) {
     conditional_button = (
       <button className="btn btn-danger" onClick={() => onDelete(note.id)}>
         Delete
@@ -31,9 +31,6 @@ const Note = ({ note, onDelete, onLike }) => {
       );
     }
   }
-  //   console.log('==================================');
-  //   console.log('button', conditional_button.p);
-  //   console.log('==================================');
   return (
     <div className="border m-2 p-4">
       <h3>{note.title}</h3>
