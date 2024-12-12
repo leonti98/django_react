@@ -9,11 +9,14 @@ const Home = () => {
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const [likeStatus, setLikeStatus] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+  const notesPerPage = 10;
 
   useEffect(() => {
     getNotes();
     getUserID();
-  }, []);
+  }, [currentPage]);
   console.log(typeof notes);
 
   const getUserID = async () => {
@@ -28,11 +31,11 @@ const Home = () => {
 
   const getNotes = async () => {
     api
-      .get('/api/notes/')
+      .get(`/api/notes/?page=${currentPage + 1}&page_size=${notesPerPage}`)
       .then((response) => response.data)
       .then((data) => {
-        setNotes(data);
-        console.log(data);
+        setNotes(data.results);
+        setPageCount(Math.ceil(data.count / notesPerPage));
       })
       .catch((error) => console.error(error));
   };
@@ -48,7 +51,7 @@ const Home = () => {
       .delete(`/api/notes/delete/${id}/`)
       .then((res) => {
         if (res.status === 204) {
-          alert('Note deleted');
+          console.log('Note deleted');
         } else {
           console.error('Error');
         }
@@ -88,6 +91,10 @@ const Home = () => {
         console.error(error);
         alert('An error occurred while creating the note.');
       });
+  };
+
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
   };
 
   return (
@@ -145,6 +152,49 @@ const Home = () => {
               likeStatus={likeStatus} // Pass likeStatus as a prop
             />
           ))}
+        </div>
+        <div itemID="pagination" className=" d-flex justify-content-center">
+          <ReactPaginate
+            previousLabel={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-arrow-left-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+                />
+              </svg>
+            }
+            nextLabel={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-arrow-right-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
+                />
+              </svg>
+            }
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+          />
         </div>
       </div>
     </div>
