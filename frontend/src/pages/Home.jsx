@@ -39,8 +39,8 @@ const Home = () => {
       .then((res) => {
         if (res.status === 201) {
           console.log('Note created');
-          setTitle('');
-          setContent('');
+          // setTitle('');
+          // setContent('');
           getNotes(api, '', currentPage, setNotes, setTotal, notesPerPage);
         } else {
           console.error('Error');

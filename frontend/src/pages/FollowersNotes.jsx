@@ -3,6 +3,7 @@ import api from '../api';
 import MyNavBar from '../components/NavBar';
 import Note from '../components/Note';
 import { likeNote } from '../helpers';
+import MyPagination from '../components/MyPagination';
 
 const FollowersNotes = () => {
   const [notes, setNotes] = useState([]);
@@ -24,7 +25,7 @@ const FollowersNotes = () => {
         console.log(data.results);
 
         setNotes(data.results);
-        setPageCount(data.count);
+        setTotal(data.count); // Set total to the count of notes
       })
       .catch((error) => {
         console.log(error);
@@ -57,6 +58,12 @@ const FollowersNotes = () => {
           />
         ))}
       </div>
+      <MyPagination
+        currentPage={currentPage + 1}
+        total={total} // Use total for the total number of notes
+        limit={notesPerPage} // Use limit for the number of notes per page
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };

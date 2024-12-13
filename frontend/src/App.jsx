@@ -33,8 +33,22 @@ const App = () => {
         <Route path="/register" element={<ReginsterAndLogout />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/user/:user_id" element={<UserProfile />} />
-        <Route path="/notes/followers" element={<FollowersNotes />} />
+        <Route
+          path="/user/:user_id"
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notes/followers"
+          element={
+            <ProtectedRoute>
+              <FollowersNotes />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
