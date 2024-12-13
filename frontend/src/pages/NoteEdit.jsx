@@ -38,7 +38,6 @@ const EditNote = () => {
       .put(`/api/notes/edit/${note_id}/`, { title, content })
       .then((res) => {
         if (res.status === 200) {
-          console.log('Note updated');
           setMessage('Note updated');
           setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
         } else {
