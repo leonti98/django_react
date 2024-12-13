@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import Note from '../components/Note';
 import ReactPaginate from 'react-paginate';
+import Pagination from 'react-bootstrap/Pagination';
+import MyPagination from '../components/MyPagination';
+import { PaginationControl } from 'react-bootstrap-pagination-control';
 
 const UserProfile = () => {
   const { user_id } = useParams();
@@ -11,10 +14,6 @@ const UserProfile = () => {
   const [username, setUsername] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-
-  const handlePageClick = (data) => {
-    setCurrentPage(data.selected);
-  };
 
   useEffect(() => {
     getNotes();
@@ -28,7 +27,7 @@ const UserProfile = () => {
         console.log(data.results);
 
         setNotes(data.results);
-        setPageCount(Math.ceil(data.count / 10));
+        setPageCount(data.count);
       })
       .catch((error) => {
         console.log(error);
@@ -45,18 +44,15 @@ const UserProfile = () => {
             <Note key={note.id} note={note} />
           ))}
         </div>
-        <ReactPaginate
-          previousLabel={'<'}
-          nextLabel={'>'}
-          breakLabel={'...'}
-          breakClassName={'break-me'}
-          pageCount={pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
+        <PaginationControl
+          page={currentPage}
+          between={4}
+          total={pageCount - 1}
+          limit={10}
+          changePage={(page) => {
+            setCurrentPage(page);
+          }}
+          ellipsis={1}
         />
       </div>
     </div>
