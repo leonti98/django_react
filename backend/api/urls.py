@@ -7,14 +7,16 @@ urlpatterns = [
     path("notes/delete/<int:pk>/", views.NoteDelete.as_view(), name="note-delete"),
     path("notes/like/<int:pk>/", views.NoteLike.as_view(), name="note-like"),
     path("auth/user/", views.CurrentUserView.as_view(), name="current-user"),
+    path("user/<int:id>/", views.getUserInfo.as_view(), name="get-user-info"),
     path(
-        "user/<int:user_id>/",
+        "user/notes/<int:user_id>/",
         views.UserNoteList.as_view(),
         name="user-note-list",
     ),
     path(
-        "user/<int:user_id>/<int:page>/",
+        "user/notes/<int:user_id>/<int:page>/",
         views.UserNoteList.as_view(),
         name="user-note-list",
     ),
+    # path("user)
 ]

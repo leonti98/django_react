@@ -85,3 +85,10 @@ class UserNoteList(generics.ListCreateAPIView):
             serializer.save(author=self.request.user)
         else:
             print(serializer.errors)
+
+
+class getUserInfo(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    lookup_field = "id"

@@ -16,9 +16,21 @@ const UserProfile = () => {
     getNotes();
   }, [currentPage]);
 
+  useEffect(() => {
+    api
+      .get(`api/user/${user_id}/`)
+      .then((response) => response.data)
+      .then((data) => {
+        setUsername(data.username);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [user_id]);
+
   const getNotes = async () => {
     api
-      .get(`api/user/${user_id}/?page=${currentPage + 1}`)
+      .get(`api/user/notes/${user_id}/?page=${currentPage + 1}`)
       .then((response) => response.data)
       .then((data) => {
         console.log(data.results);
