@@ -14,7 +14,7 @@ const UserProfile = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [followers, setFollowers] = useState(0);
-  const [likeStatus, setLikeStatus] = useState(false); // Add likeStatus state
+  const [likeStatus, setLikeStatus] = useState(false);
 
   useEffect(() => {
     getNotes(api, user_id, currentPage, setNotes, setPageCount);
@@ -37,13 +37,20 @@ const UserProfile = () => {
     <div>
       <Navbar />
       <div className="container d-flex-column align-items-center justify-content-center">
-        <h1 className=" text-center">{username} Posts</h1>
-        <p className="text-center">followers: {followers.length}</p>
-        <FollowButton
-          userToFollow={user_id}
-          followers={followers ? followers : []}
-          setFollowers={setFollowers} // Pass setFollowers to FollowButton
-        />
+        {user_id === localStorage.getItem('user_id') ? (
+          <h1 className=" text-center">My Posts</h1>
+        ) : (
+          <>
+            <h1 className=" text-center">{username} Posts</h1>
+            <p className="text-center">followers: {followers.length}</p>
+            <FollowButton
+              userToFollow={user_id}
+              followers={followers ? followers : []}
+              setFollowers={setFollowers}
+            />
+          </>
+        )}
+
         <div className="">
           {notes.map((note) => (
             <Note
