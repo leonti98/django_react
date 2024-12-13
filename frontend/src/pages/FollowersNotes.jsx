@@ -35,8 +35,8 @@ const FollowersNotes = () => {
       </div>
       <MyPagination
         currentPage={currentPage + 1}
-        total={pageCount} // Use total for the total number of notes
-        limit={notesPerPage} // Use limit for the number of notes per page
+        total={pageCount}
+        limit={notesPerPage}
         setCurrentPage={setCurrentPage}
       />
     </div>

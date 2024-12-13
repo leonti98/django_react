@@ -57,11 +57,11 @@ export const likeNote = async (
   notesPerPage = 10
 ) => {
   api
-    .put(`/api/notes/like/${id}/`, {}) // Send an empty payload
+    .put(`/api/notes/like/${id}/`, {})
     .then((res) => {
       if (res.status === 200) {
         console.log('Note liked');
-        setLikeStatus((prevStatus) => !prevStatus); // Toggle likeStatus to trigger re-render
+        setLikeStatus((prevStatus) => !prevStatus);
         getNotes(
           api,
           user_id,
@@ -69,7 +69,7 @@ export const likeNote = async (
           setNotes,
           setPageCount,
           notesPerPage
-        ); // Update notes data
+        );
       } else {
         console.error('Error');
       }

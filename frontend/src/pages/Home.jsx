@@ -18,7 +18,6 @@ const Home = () => {
     getNotes(api, '', currentPage, setNotes, setTotal, notesPerPage);
     getUser();
   }, [currentPage]);
-  console.log(typeof notes);
 
   const getUser = async () => {
     api
@@ -38,8 +37,6 @@ const Home = () => {
       .then((res) => {
         if (res.status === 201) {
           console.log('Note created');
-          // setTitle('');
-          // setContent('');
           getNotes(api, '', currentPage, setNotes, setTotal, notesPerPage);
         } else {
           console.error('Error');

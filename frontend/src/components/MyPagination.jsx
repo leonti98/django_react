@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { useState } from 'react';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
