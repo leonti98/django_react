@@ -5,6 +5,7 @@ from rest_framework import generics
 from .serializers import UserSerializer, NoteSerializer, LikeSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Note
+from rest_framework.pagination import PageNumberPagination
 
 
 # Create your views here.
@@ -18,7 +19,7 @@ class CreateUserView(generics.CreateAPIView):
 
 class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return Note.objects.filter().order_by("-created_at")
@@ -69,16 +70,18 @@ class CurrentUserView(generics.GenericAPIView):
 
 
 # class to list notes of the any user
-class UserNoteList(generics.ListAPIView):
+class UserNoteList(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
     permission_classes = [AllowAny]
+    pagination_class = PageNumberPagination
+    page_size = 10
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
         return Note.objects.filter(author=user_id).order_by("-created_at")
 
-    def get(self, request, user_id):
-        queryset = self.get_queryset()
-        serializer = NoteSerializer(queryset, many=True)
-        user = User.objects.get(id=user_id)
-        return Response({"username": user.username, "notes": serializer.data})
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)

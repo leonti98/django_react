@@ -12,4 +12,9 @@ urlpatterns = [
         views.UserNoteList.as_view(),
         name="user-note-list",
     ),
+    path(
+        "user/<int:user_id>/<int:page>/",
+        views.UserNoteList.as_view(),
+        name="user-note-list",
+    ),
 ]
