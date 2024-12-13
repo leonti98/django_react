@@ -1,28 +1,45 @@
 /* eslint-disable react/prop-types */
+import { useState } from 'react';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { Link } from 'react-router-dom';
 import LikeButton from './LikeButton';
+import api from '../api';
+import { deleteNote, likeNote } from '../helpers';
+
 TimeAgo.addDefaultLocale(en);
 
-const Note = ({ note, onDelete, onLike }) => {
+const Note = ({ note, onNoteDeleted }) => {
+  const [likeStatus, setLikeStatus] = useState(
+    note.likes.includes(Number(localStorage.getItem('user_id')))
+  );
   const timeAgo = new TimeAgo('en-US');
   const formattedDate = timeAgo.format(new Date(note.created_at));
+
+  const handleDelete = () => {
+    deleteNote(api, note.id, () => {
+      onNoteDeleted(note.id);
+    });
+  };
+
+  const handleLike = () => {
+    likeNote(api, note.id, setLikeStatus);
+  };
 
   let conditional_button = <></>;
 
   if (note.author === Number(localStorage.getItem('user_id'))) {
     conditional_button = (
-      <button className="btn btn-danger" onClick={() => onDelete(note.id)}>
+      <button className="btn btn-danger" onClick={handleDelete}>
         Delete
       </button>
     );
   } else {
     conditional_button = (
       <LikeButton
-        liked={note.likes.includes(Number(localStorage.getItem('user_id')))}
+        liked={likeStatus}
         likesCount={note.likes_count}
-        onLike={() => onLike(note.id)}
+        onLike={handleLike}
       />
     );
   }

@@ -4,13 +4,14 @@ export const getNotes = async (
   currentPage,
   setNotes,
   setPageCount,
-  notesPerPage = 10
+  notesPerPage = 10,
+  filters = null
 ) => {
   let url = user_id
     ? `api/user/notes/${user_id}/?page=${currentPage + 1}`
     : `api/notes/?page=${currentPage + 1}&page_size=${notesPerPage}`;
-  if (user_id === 'followers') {
-    url = `api/notes/followers/?page=${currentPage + 1}`;
+  if (filters) {
+    url += `&filters=${encodeURIComponent(filters)}`;
   }
   api
     .get(url)
@@ -24,16 +25,7 @@ export const getNotes = async (
     });
 };
 
-export const deleteNote = async (
-  api,
-  id,
-  getNotes,
-  user_id,
-  currentPage,
-  setNotes,
-  setPageCount,
-  notesPerPage = 10
-) => {
+export const deleteNote = async (api, id, onNoteDeleted) => {
   const confirmation = window.confirm(
     'Are you sure you want to delete this note?'
   );
@@ -45,14 +37,7 @@ export const deleteNote = async (
     .then((res) => {
       if (res.status === 204) {
         console.log('Note deleted');
-        getNotes(
-          api,
-          user_id,
-          currentPage,
-          setNotes,
-          setPageCount,
-          notesPerPage
-        );
+        onNoteDeleted();
       } else {
         console.error('Error');
       }

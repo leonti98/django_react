@@ -26,7 +26,16 @@ class NoteListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Note.objects.filter().order_by("-created_at")
+        queryset = Note.objects.all().order_by("-created_at")
+        filters = self.request.query_params.get("filters", None)
+        if filters:
+            # Apply filters to the queryset
+            # Example: filters could be a JSON string with filter conditions
+            import json
+
+            filter_dict = json.loads(filters)
+            queryset = queryset.filter(**filter_dict)  # Filters applied here
+        return queryset
 
     def perform_create(self, serializer):
         if serializer.is_valid():

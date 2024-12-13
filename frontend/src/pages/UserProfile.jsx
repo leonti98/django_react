@@ -14,11 +14,17 @@ const UserProfile = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [followers, setFollowers] = useState(0);
-  const [likeStatus, setLikeStatus] = useState(false);
+
+  const handleNoteDeleted = (deletedNoteId) => {
+    setNotes((prevNotes) =>
+      prevNotes.filter((note) => note.id !== deletedNoteId)
+    );
+  };
 
   useEffect(() => {
-    getNotes(api, user_id, currentPage, setNotes, setPageCount);
-  }, [currentPage]);
+    const filters = JSON.stringify({ author: user_id });
+    getNotes(api, '', currentPage, setNotes, setPageCount, 10, filters);
+  }, [currentPage, user_id]);
 
   useEffect(() => {
     api
@@ -53,33 +59,7 @@ const UserProfile = () => {
 
         <div className="">
           {notes.map((note) => (
-            <Note
-              key={note.id}
-              note={note}
-              onDelete={() =>
-                deleteNote(
-                  api,
-                  note.id,
-                  getNotes,
-                  user_id,
-                  currentPage,
-                  setNotes,
-                  setPageCount
-                )
-              }
-              onLike={() =>
-                likeNote(
-                  api,
-                  note.id,
-                  setLikeStatus,
-                  getNotes,
-                  user_id,
-                  currentPage,
-                  setNotes,
-                  setPageCount
-                )
-              }
-            />
+            <Note key={note.id} note={note} onNoteDeleted={handleNoteDeleted} />
           ))}
         </div>
         <MyPagination

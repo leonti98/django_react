@@ -4,13 +4,12 @@ import '../styles/Main.css';
 import Note from '../components/Note';
 import MyNavBar from '../components/NavBar';
 import MyPagination from '../components/MyPagination';
-import { getNotes, deleteNote, likeNote } from '../helpers';
+import { getNotes } from '../helpers';
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
-  const [likeStatus, setLikeStatus] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [total, setTotal] = useState(0);
   const notesPerPage = 10;
@@ -50,6 +49,12 @@ const Home = () => {
         console.error(error);
         alert('An error occurred while creating the note.');
       });
+  };
+
+  const handleNoteDeleted = (deletedNoteId) => {
+    setNotes((prevNotes) =>
+      prevNotes.filter((note) => note.id !== deletedNoteId)
+    );
   };
 
   return (
@@ -100,36 +105,7 @@ const Home = () => {
         <h2>Notes</h2>
         <div className="">
           {notes.map((note) => (
-            <Note
-              key={note.id}
-              note={note}
-              onDelete={() =>
-                deleteNote(
-                  api,
-                  note.id,
-                  getNotes,
-                  '',
-                  currentPage,
-                  setNotes,
-                  setTotal,
-                  notesPerPage
-                )
-              }
-              onLike={() =>
-                likeNote(
-                  api,
-                  note.id,
-                  setLikeStatus,
-                  getNotes,
-                  '',
-                  currentPage,
-                  setNotes,
-                  setTotal,
-                  notesPerPage
-                )
-              }
-              likeStatus={likeStatus} // Pass likeStatus as a prop
-            />
+            <Note key={note.id} note={note} onNoteDeleted={handleNoteDeleted} />
           ))}
         </div>
         <div>
