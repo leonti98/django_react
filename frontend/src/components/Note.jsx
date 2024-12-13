@@ -30,9 +30,14 @@ const Note = ({ note, onNoteDeleted }) => {
 
   if (note.author === Number(localStorage.getItem('user_id'))) {
     conditional_button = (
-      <button className="btn btn-danger" onClick={handleDelete}>
-        Delete
-      </button>
+      <>
+        <button className="btn btn-danger me-2" onClick={handleDelete}>
+          Delete
+        </button>
+        <Link to={`/notes/edit/${note.id}`} className="btn btn-primary me-2">
+          Edit
+        </Link>
+      </>
     );
   } else {
     conditional_button = (
