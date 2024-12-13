@@ -11,6 +11,7 @@ const UserProfile = () => {
   const [username, setUsername] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [followers, setFollowers] = useState(0);
 
   useEffect(() => {
     getNotes();
@@ -22,6 +23,7 @@ const UserProfile = () => {
       .then((response) => response.data)
       .then((data) => {
         setUsername(data.username);
+        setFollowers(data.followers);
       })
       .catch((error) => {
         console.log(error);
@@ -48,6 +50,9 @@ const UserProfile = () => {
       <Navbar />
       <div className="container d-flex-column align-items-center justify-content-center">
         <h1 className=" text-center">{username} Posts</h1>
+        <p className="text-center">
+          followers {followers.count > 0 ? followers.count : 0}
+        </p>
         <div className="">
           {notes.map((note) => (
             <Note key={note.id} note={note} />

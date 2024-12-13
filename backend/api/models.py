@@ -17,6 +17,13 @@ class User(AbstractUser):
         help_text="Specific permissions for this user.",
         verbose_name="user permissions",
     )
+    followers = models.ManyToManyField(
+        "self",
+        related_name="following",
+        blank=True,
+        symmetrical=False,
+        help_text="The users that follow this user.",
+    )
 
 
 class Note(models.Model):
