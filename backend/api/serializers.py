@@ -1,6 +1,5 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note
+from .models import Note, User  # Import the custom User model
 
 
 class UserSerializer(serializers.ModelSerializer):

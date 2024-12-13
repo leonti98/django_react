@@ -1,16 +1,15 @@
 from rest_framework.response import Response
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from rest_framework import generics
 from .serializers import UserSerializer, NoteSerializer, LikeSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note
+from .models import Note, User  # Import the custom User model
 from rest_framework.pagination import PageNumberPagination
 
 
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.all()  # Use the custom User model
     # serializer_class to set the serializer class to UserSerializer
     serializer_class = UserSerializer
     # permission_classes to AllowAny to allow unauthenticated users to create a new user
@@ -90,5 +89,5 @@ class UserNoteList(generics.ListCreateAPIView):
 class getUserInfo(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all()  # Use the custom User model
     lookup_field = "id"
