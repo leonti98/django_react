@@ -45,6 +45,26 @@ const UserProfile = () => {
       });
   };
 
+  const deleteNote = async (id) => {
+    const confirmation = window.confirm(
+      'Are you sure you want to delete this note?'
+    );
+    if (!confirmation) {
+      return;
+    }
+    api
+      .delete(`/api/notes/delete/${id}/`)
+      .then((res) => {
+        if (res.status === 204) {
+          console.log('Note deleted');
+        } else {
+          console.error('Error');
+        }
+        getNotes();
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
     <div>
       <Navbar />
@@ -55,7 +75,7 @@ const UserProfile = () => {
         </p>
         <div className="">
           {notes.map((note) => (
-            <Note key={note.id} note={note} />
+            <Note key={note.id} note={note} onDelete={deleteNote} />
           ))}
         </div>
         <MyPagination
