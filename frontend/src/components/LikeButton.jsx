@@ -1,14 +1,23 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import { useState } from 'react';
+import api from '../api';
 
-const LikeButton = ({ liked, likesCount, onLike }) => {
-  const [isLiked, setIsLiked] = useState(liked);
+const LikeButton = ({ liked, likesCount, id }) => {
   const [count, setCount] = useState(likesCount);
+  const [isLiked, setIsLiked] = useState(liked);
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
-    setCount(isLiked ? count - 1 : count + 1);
-    onLike();
+    api
+      .put(`/api/notes/like/${id}/`, {})
+      .then((res) => {
+        if (res.status === 200) {
+          setIsLiked(!isLiked);
+          setCount(isLiked ? count - 1 : count + 1);
+        } else {
+          console.error('Error');
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -42,7 +51,7 @@ const LikeButton = ({ liked, likesCount, onLike }) => {
           </svg>
         </>
       )}{' '}
-      <p className=" d-inline">{count}</p>
+      <p className="d-inline">{count}</p>
     </>
   );
 };

@@ -5,7 +5,7 @@ import en from 'javascript-time-ago/locale/en';
 import { Link } from 'react-router-dom';
 import LikeButton from './LikeButton';
 import api from '../api';
-import { deleteNote, likeNote } from '../helpers';
+import { deleteNote } from '../helpers';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -20,10 +20,6 @@ const Note = ({ note, onNoteDeleted }) => {
     deleteNote(api, note.id, () => {
       onNoteDeleted(note.id);
     });
-  };
-
-  const handleLike = () => {
-    likeNote(api, note.id, setLikeStatus);
   };
 
   let conditional_button = <></>;
@@ -44,7 +40,7 @@ const Note = ({ note, onNoteDeleted }) => {
       <LikeButton
         liked={likeStatus}
         likesCount={note.likes_count}
-        onLike={handleLike}
+        id={note.id}
       />
     );
   }

@@ -44,35 +44,3 @@ export const deleteNote = async (api, id, onNoteDeleted) => {
     })
     .catch((error) => console.error(error));
 };
-
-export const likeNote = async (
-  api,
-  id,
-  setLikeStatus,
-  getNotes,
-  user_id,
-  currentPage,
-  setNotes,
-  setPageCount,
-  notesPerPage = 10
-) => {
-  api
-    .put(`/api/notes/like/${id}/`, {})
-    .then((res) => {
-      if (res.status === 200) {
-        console.log('Note liked');
-        setLikeStatus((prevStatus) => !prevStatus);
-        getNotes(
-          api,
-          user_id,
-          currentPage,
-          setNotes,
-          setPageCount,
-          notesPerPage
-        );
-      } else {
-        console.error('Error');
-      }
-    })
-    .catch((error) => console.error(error));
-};
