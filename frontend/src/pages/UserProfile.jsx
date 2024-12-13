@@ -3,7 +3,7 @@ import api from '../api';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import Note from '../components/Note';
-import { PaginationControl } from 'react-bootstrap-pagination-control';
+import MyPagination from '../components/MyPagination';
 
 const UserProfile = () => {
   const { user_id } = useParams();
@@ -41,15 +41,11 @@ const UserProfile = () => {
             <Note key={note.id} note={note} />
           ))}
         </div>
-        <PaginationControl
-          page={currentPage + 1}
-          between={4}
+        <MyPagination
+          currentPage={currentPage + 1}
           total={pageCount}
           limit={10}
-          changePage={(page) => {
-            setCurrentPage(page - 1);
-          }}
-          ellipsis={1}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </div>

@@ -3,17 +3,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
-const MyPagination = () => {
+const MyPagination = ({ currentPage, total, limit, setCurrentPage }) => {
   const [page, setPage] = useState(1);
 
   return (
     <PaginationControl
-      page={page}
+      page={currentPage}
       between={4}
-      total={250}
-      limit={20}
+      total={total}
+      limit={limit}
       changePage={(page) => {
-        setPage(page);
+        setCurrentPage(page - 1);
       }}
       ellipsis={1}
     />
