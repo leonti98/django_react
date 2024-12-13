@@ -3,9 +3,6 @@ import api from '../api';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import Note from '../components/Note';
-import ReactPaginate from 'react-paginate';
-import Pagination from 'react-bootstrap/Pagination';
-import MyPagination from '../components/MyPagination';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
 const UserProfile = () => {

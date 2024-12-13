@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
 const MyPagination = () => {
