@@ -84,3 +84,15 @@ npm start
 ```
 
 ## Screenshots
+
+### Home
+
+![Home](screenshots/home.png)
+
+### User Profile
+
+![Profile](screenshots/user_profile.png)
+
+### Other user's profile
+
+![Other Profile](screenshots/else_profile.png)
