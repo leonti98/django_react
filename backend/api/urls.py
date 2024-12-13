@@ -20,5 +20,5 @@ urlpatterns = [
     ),
     path("user/follow/<int:pk>/", views.FollowUser.as_view(), name="follow-user"),
     path("notes/followers/", views.FollowerNotes.as_view(), name="followers-notes"),
-    path("notes/edit/<int:pk>/", views.NoteEdit.as_view(), name="note-edit"),
+    path("notes/edit/<int:id>/", views.NoteEdit.as_view(), name="note-edit"),
 ]

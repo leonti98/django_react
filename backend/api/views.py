@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import generics
 from .serializers import (
+    NoteEditSerializer,
     UserSerializer,
     NoteSerializer,
     LikeSerializer,
@@ -23,7 +24,7 @@ class CreateUserView(generics.CreateAPIView):
 
 class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Note.objects.all().order_by("-created_at")
@@ -143,9 +144,16 @@ class FollowerNotes(generics.ListCreateAPIView):
             print(serializer.errors)
 
 
-class NoteEdit(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
+class NoteEdit(generics.RetrieveUpdateAPIView):
+    serializer_class = NoteEditSerializer
+    permission_classes = [AllowAny]
+    lookup_field = "id"
 
     def get_queryset(self):
-        return Note.objects.filter(author=self.request.user)
+        return Note.objects.all().filter(author=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)

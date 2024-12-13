@@ -28,7 +28,7 @@ const FollowersNotes = () => {
     <div>
       <MyNavBar />
       <div className="container">
-        <h1>Followers Notes</h1>
+        <h1 className="text-center">Followers Notes</h1>
         {notes.map((note) => (
           <Note key={note.id} note={note} onNoteDeleted={handleNoteDeleted} />
         ))}

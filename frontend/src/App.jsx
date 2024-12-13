@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound';
 import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import FollowersNotes from './pages/FollowersNotes';
+import NoteEdit from './pages/NoteEdit';
 
 const Logout = () => {
   localStorage.clear();
@@ -46,6 +47,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <FollowersNotes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notes/edit/:note_id"
+          element={
+            <ProtectedRoute>
+              <NoteEdit />
             </ProtectedRoute>
           }
         />

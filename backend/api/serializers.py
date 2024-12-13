@@ -47,3 +47,9 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["followers"]
+
+
+class NoteEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ["title", "content"]
