@@ -42,12 +42,12 @@ const UserProfile = () => {
           ))}
         </div>
         <PaginationControl
-          page={currentPage}
+          page={currentPage + 1}
           between={4}
-          total={pageCount - 1}
+          total={pageCount}
           limit={10}
           changePage={(page) => {
-            setCurrentPage(page);
+            setCurrentPage(page - 1);
           }}
           ellipsis={1}
         />
