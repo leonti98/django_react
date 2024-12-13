@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import api from '../api';
 import '../styles/Main.css';
 import Note from '../components/Note';
-import ReactPaginate from 'react-paginate';
 import MyNavBar from '../components/NavBar';
 import MyPagination from '../components/MyPagination';
+import { getNotes, deleteNote, likeNote } from '../helpers';
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
@@ -16,7 +16,7 @@ const Home = () => {
   const notesPerPage = 10;
 
   useEffect(() => {
-    getNotes();
+    getNotes(api, '', currentPage, setNotes, setTotal, notesPerPage);
     getUser();
   }, [currentPage]);
   console.log(typeof notes);
@@ -32,52 +32,6 @@ const Home = () => {
       .catch((error) => console.error(error));
   };
 
-  const getNotes = async () => {
-    api
-      .get(`/api/notes/?page=${currentPage + 1}&page_size=${notesPerPage}`)
-      .then((response) => response.data)
-      .then((data) => {
-        setNotes(data.results);
-        setTotal(data.count);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const deleteNote = async (id) => {
-    const confirmation = window.confirm(
-      'Are you sure you want to delete this note?'
-    );
-    if (!confirmation) {
-      return;
-    }
-    api
-      .delete(`/api/notes/delete/${id}/`)
-      .then((res) => {
-        if (res.status === 204) {
-          console.log('Note deleted');
-        } else {
-          console.error('Error');
-        }
-        getNotes();
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const likeNote = async (id) => {
-    api
-      .put(`/api/notes/like/${id}/`, {}) // Send an empty payload
-      .then((res) => {
-        if (res.status === 200) {
-          console.log('Note liked');
-          setLikeStatus(!likeStatus); // Toggle likeStatus to trigger re-render
-          getNotes(); // Update notes data
-        } else {
-          console.error('Error');
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
   const createNote = async (e) => {
     e.preventDefault();
     api
@@ -87,7 +41,7 @@ const Home = () => {
           console.log('Note created');
           setTitle('');
           setContent('');
-          getNotes();
+          getNotes(api, '', currentPage, setNotes, setTotal, notesPerPage);
         } else {
           console.error('Error');
         }
@@ -149,8 +103,31 @@ const Home = () => {
             <Note
               key={note.id}
               note={note}
-              onDelete={deleteNote}
-              onLike={likeNote}
+              onDelete={() =>
+                deleteNote(
+                  api,
+                  note.id,
+                  getNotes,
+                  '',
+                  currentPage,
+                  setNotes,
+                  setTotal,
+                  notesPerPage
+                )
+              }
+              onLike={() =>
+                likeNote(
+                  api,
+                  note.id,
+                  setLikeStatus,
+                  getNotes,
+                  '',
+                  currentPage,
+                  setNotes,
+                  setTotal,
+                  notesPerPage
+                )
+              }
               likeStatus={likeStatus} // Pass likeStatus as a prop
             />
           ))}

@@ -5,6 +5,7 @@ import Navbar from '../components/NavBar';
 import Note from '../components/Note';
 import MyPagination from '../components/MyPagination';
 import FollowButton from '../components/FollowButton';
+import { getNotes, deleteNote, likeNote } from '../helpers';
 
 const UserProfile = () => {
   const { user_id } = useParams();
@@ -13,9 +14,10 @@ const UserProfile = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [followers, setFollowers] = useState(0);
+  const [likeStatus, setLikeStatus] = useState(false); // Add likeStatus state
 
   useEffect(() => {
-    getNotes();
+    getNotes(api, user_id, currentPage, setNotes, setPageCount);
   }, [currentPage]);
 
   useEffect(() => {
@@ -31,40 +33,6 @@ const UserProfile = () => {
       });
   }, [user_id]);
 
-  const getNotes = async () => {
-    api
-      .get(`api/user/notes/${user_id}/?page=${currentPage + 1}`)
-      .then((response) => response.data)
-      .then((data) => {
-        console.log(data.results);
-
-        setNotes(data.results);
-        setPageCount(data.count);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const deleteNote = async (id) => {
-    const confirmation = window.confirm(
-      'Are you sure you want to delete this note?'
-    );
-    if (!confirmation) {
-      return;
-    }
-    api
-      .delete(`/api/notes/delete/${id}/`)
-      .then((res) => {
-        if (res.status === 204) {
-          console.log('Note deleted');
-        } else {
-          console.error('Error');
-        }
-        getNotes();
-      })
-      .catch((error) => console.error(error));
-  };
   return (
     <div>
       <Navbar />
@@ -78,7 +46,33 @@ const UserProfile = () => {
         />
         <div className="">
           {notes.map((note) => (
-            <Note key={note.id} note={note} onDelete={deleteNote} />
+            <Note
+              key={note.id}
+              note={note}
+              onDelete={() =>
+                deleteNote(
+                  api,
+                  note.id,
+                  getNotes,
+                  user_id,
+                  currentPage,
+                  setNotes,
+                  setPageCount
+                )
+              }
+              onLike={() =>
+                likeNote(
+                  api,
+                  note.id,
+                  setLikeStatus,
+                  getNotes,
+                  user_id,
+                  currentPage,
+                  setNotes,
+                  setPageCount
+                )
+              }
+            />
           ))}
         </div>
         <MyPagination
