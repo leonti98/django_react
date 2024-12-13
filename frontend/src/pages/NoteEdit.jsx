@@ -5,6 +5,7 @@ import api from '../api';
 import '../styles/Main.css';
 import MyNavBar from '../components/NavBar';
 import LoadingIndicator from '../components/LoadingIndicator';
+import SuccessAlert from '../components/SuccessAlert';
 
 const EditNote = () => {
   const [title, setTitle] = useState('');
@@ -39,6 +40,7 @@ const EditNote = () => {
         if (res.status === 200) {
           console.log('Note updated');
           setMessage('Note updated');
+          setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
         } else {
           console.error('Error');
         }
@@ -80,7 +82,7 @@ const EditNote = () => {
             Submit
           </button>
           {loading && <LoadingIndicator />}
-          {message && <h4 className="text-success">{message}</h4>}
+          {message && <SuccessAlert message={message} />}
         </form>
       </div>
     </div>
