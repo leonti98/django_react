@@ -68,13 +68,14 @@ const EditNote = () => {
               onChange={handleTitleChange}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group mb-4">
             <label htmlFor="content">Content</label>
             <textarea
               className="form-control"
               id="content"
               value={content}
               onChange={handleContentChange}
+              style={{ height: '200px' }}
             />
           </div>
           <button type="submit" className="btn btn-primary">

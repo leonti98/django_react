@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { Link } from 'react-router-dom';
@@ -10,9 +9,10 @@ import { deleteNote } from '../helpers';
 TimeAgo.addDefaultLocale(en);
 
 const Note = ({ note, onNoteDeleted }) => {
-  const [likeStatus, setLikeStatus] = useState(
-    note.likes.includes(Number(localStorage.getItem('user_id')))
+  const likeStatus = note.likes.includes(
+    Number(localStorage.getItem('user_id'))
   );
+
   const timeAgo = new TimeAgo('en-US');
   const formattedDate = timeAgo.format(new Date(note.created_at));
 

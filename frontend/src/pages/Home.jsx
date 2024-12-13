@@ -9,8 +9,6 @@ import Form from '../components/Form';
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [total, setTotal] = useState(0);
   const notesPerPage = 10;

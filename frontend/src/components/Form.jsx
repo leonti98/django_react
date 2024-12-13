@@ -55,6 +55,7 @@ const Form = ({ setNotes }) => {
             value={content}
             required
             onChange={(e) => setContent(e.target.value)}
+            style={{ height: '200px' }}
           />
         </div>
         <br />
