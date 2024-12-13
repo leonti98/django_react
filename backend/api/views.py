@@ -24,7 +24,7 @@ class CreateUserView(generics.CreateAPIView):
 
 class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Note.objects.all().order_by("-created_at")
@@ -146,7 +146,7 @@ class FollowerNotes(generics.ListCreateAPIView):
 
 class NoteEdit(generics.RetrieveUpdateAPIView):
     serializer_class = NoteEditSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     lookup_field = "id"
 
     def get_queryset(self):
