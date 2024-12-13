@@ -115,3 +115,20 @@ class FollowUser(generics.UpdateAPIView):
             instance.followers.add(request_user)
             followed = True
         return Response({"followed": followed})  # Corrected response return
+
+
+class FollowerNotes(generics.ListCreateAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+    page_size = 10
+
+    def get_queryset(self):
+        user = self.request.user
+        return Note.objects.filter(author__followers=user).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)

@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
+import FollowersNotes from './pages/FollowersNotes';
 
 const Logout = () => {
   localStorage.clear();
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/user/:user_id" element={<UserProfile />} />
+        <Route path="/notes/followers" element={<FollowersNotes />} />
       </Routes>
     </BrowserRouter>
   );

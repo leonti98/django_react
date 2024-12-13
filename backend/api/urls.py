@@ -19,4 +19,5 @@ urlpatterns = [
         name="user-note-list",
     ),
     path("user/follow/<int:pk>/", views.FollowUser.as_view(), name="follow-user"),
+    path("notes/followers/", views.FollowerNotes.as_view(), name="followers-notes"),
 ]
