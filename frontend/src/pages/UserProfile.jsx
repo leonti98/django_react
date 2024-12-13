@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import Note from '../components/Note';
 import MyPagination from '../components/MyPagination';
+import FollowButton from '../components/FollowButton';
 
 const UserProfile = () => {
   const { user_id } = useParams();
@@ -64,15 +65,17 @@ const UserProfile = () => {
       })
       .catch((error) => console.error(error));
   };
-
   return (
     <div>
       <Navbar />
       <div className="container d-flex-column align-items-center justify-content-center">
         <h1 className=" text-center">{username} Posts</h1>
-        <p className="text-center">
-          followers {followers.count > 0 ? followers.count : 0}
-        </p>
+        <p className="text-center">followers: {followers.length}</p>
+        <FollowButton
+          userToFollow={user_id}
+          followers={followers ? followers : []}
+          setFollowers={setFollowers} // Pass setFollowers to FollowButton
+        />
         <div className="">
           {notes.map((note) => (
             <Note key={note.id} note={note} onDelete={deleteNote} />

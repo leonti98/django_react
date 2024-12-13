@@ -1,7 +1,12 @@
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer, LikeSerializer
+from .serializers import (
+    UserSerializer,
+    NoteSerializer,
+    LikeSerializer,
+    FollowSerializer,
+)
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Note, User  # Import the custom User model
 from rest_framework.pagination import PageNumberPagination
@@ -18,7 +23,7 @@ class CreateUserView(generics.CreateAPIView):
 
 class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Note.objects.filter().order_by("-created_at")
@@ -71,7 +76,7 @@ class CurrentUserView(generics.GenericAPIView):
 # class to list notes of the any user
 class UserNoteList(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
     page_size = 10
 
@@ -87,7 +92,26 @@ class UserNoteList(generics.ListCreateAPIView):
 
 
 class getUserInfo(generics.RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
     queryset = User.objects.all()  # Use the custom User model
     lookup_field = "id"
+
+
+class FollowUser(generics.UpdateAPIView):
+    serializer_class = FollowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return User.objects.all()
+
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        request_user = self.request.user  # Corrected variable name
+        if request_user in instance.followers.all():
+            instance.followers.remove(request_user)
+            followed = False
+        else:
+            instance.followers.add(request_user)
+            followed = True
+        return Response({"followed": followed})  # Corrected response return

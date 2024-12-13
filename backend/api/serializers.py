@@ -41,3 +41,9 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = []
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["followers"]

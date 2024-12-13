@@ -18,5 +18,5 @@ urlpatterns = [
         views.UserNoteList.as_view(),
         name="user-note-list",
     ),
-    # path("user)
+    path("user/follow/<int:pk>/", views.FollowUser.as_view(), name="follow-user"),
 ]
