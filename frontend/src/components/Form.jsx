@@ -1,94 +1,66 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import api from '../api';
-import { useNavigate } from 'react-router-dom';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
-import '../styles/Main.css';
-import LoadingIndicator from './LoadingIndicator';
 
-const Form = ({ route, method }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+const Form = ({ setNotes }) => {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
-  const name = method === 'login' ? 'Login' : 'Register';
-
-  const handleSubmit = async (e) => {
-    setLoading(true);
+  const createNote = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.post(route, { username, password });
-      if (method === 'login') {
-        localStorage.setItem(ACCESS_TOKEN, response.data.access);
-        localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-        navigate('/');
-      } else {
-        alert('Registered successfully');
-        navigate('/login');
-      }
-    } catch (error) {
-      setMessage(error.response.data);
-    } finally {
-      setLoading(false);
-    }
+    api
+      .post('/api/notes/', { title, content })
+      .then((res) => {
+        if (res.status === 201) {
+          setNotes((prevNotes) => [res.data, ...prevNotes]);
+        } else {
+          console.error('Error');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('An error occurred while creating the note.');
+      });
   };
-  return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <form
-        onSubmit={handleSubmit}
-        className="form-container border p-5 shadow-sm d-flex flex-column"
-      >
-        <h1>{name}</h1>
-        {Object.keys(message).map((key) => (
-          <p key={key} className="text-danger">
-            {key}: {message[key]}
-          </p>
-        ))}
 
-        <div className="mb-3">
-          <label htmlFor="username" className="form-lable">
-            Username
+  return (
+    <div className="container">
+      <form
+        onSubmit={createNote}
+        className="form-container border p-4 shadow-sm mt-3"
+      >
+        <h2 className=" text-center">Create a note</h2>
+        <div>
+          <label htmlFor="form-title" className="form-lable">
+            Title
           </label>
           <input
-            itemID="username"
+            itemID="form-title"
             className="form-control"
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
+            required
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
+        <br />
+        <div>
+          <label htmlFor="form-content" className="form-lable">
+            Content
           </label>
-          <input
-            itemID="password"
+          <textarea
+            itemID="form-content"
             className="form-control"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
+            placeholder="Content"
+            value={content}
+            required
+            onChange={(e) => setContent(e.target.value)}
           />
         </div>
-        {loading && <LoadingIndicator />}
-        <div className="align-content-center d-flex justify-content-around">
-          <button
-            className="btn btn-primary btn"
-            type="submit"
-            disabled={loading}
-          >
-            {name}
-          </button>
-          <button
-            className="btn btn-primary btn"
-            type="submit"
-            disabled={loading}
-          >
-            {name}
-          </button>
-        </div>
+        <br />
+        <button type="submit" className="btn btn-primary">
+          Create
+        </button>
       </form>
     </div>
   );

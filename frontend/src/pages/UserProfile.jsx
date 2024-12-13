@@ -5,15 +5,17 @@ import Navbar from '../components/NavBar';
 import Note from '../components/Note';
 import MyPagination from '../components/MyPagination';
 import FollowButton from '../components/FollowButton';
-import { getNotes, deleteNote, likeNote } from '../helpers';
+import { getNotes } from '../helpers';
 
 const UserProfile = () => {
+  // Get user_id from URL
   const { user_id } = useParams();
   const [notes, setNotes] = useState([]);
   const [username, setUsername] = useState('');
+  const [followers, setFollowers] = useState(0);
+  // Pagination
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const [followers, setFollowers] = useState(0);
 
   const handleNoteDeleted = (deletedNoteId) => {
     setNotes((prevNotes) =>
@@ -48,7 +50,6 @@ const UserProfile = () => {
         ) : (
           <>
             <h1 className=" text-center">{username} Posts</h1>
-            <p className="text-center">followers: {followers.length}</p>
             <FollowButton
               userToFollow={user_id}
               followers={followers ? followers : []}

@@ -5,6 +5,7 @@ import Note from '../components/Note';
 import MyNavBar from '../components/NavBar';
 import MyPagination from '../components/MyPagination';
 import { getNotes } from '../helpers';
+import Form from '../components/Form';
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
@@ -57,46 +58,7 @@ const Home = () => {
   return (
     <div>
       <MyNavBar />
-      <div className="container">
-        <form
-          onSubmit={createNote}
-          className="form-container border p-4 shadow-sm mt-3"
-        >
-          <h2 className=" text-center">Create a note</h2>
-          <div>
-            <label htmlFor="form-title" className="form-lable">
-              Title
-            </label>
-            <input
-              itemID="form-title"
-              className="form-control"
-              type="text"
-              required
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <br />
-          <div>
-            <label htmlFor="form-content" className="form-lable">
-              Content
-            </label>
-            <textarea
-              itemID="form-content"
-              className="form-control"
-              placeholder="Content"
-              value={content}
-              required
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
-          <br />
-          <button type="submit" className="btn btn-primary">
-            Create
-          </button>
-        </form>
-      </div>
+      <Form setNotes={setNotes} />
       <br />
       <div className="container">
         <h2>Notes</h2>

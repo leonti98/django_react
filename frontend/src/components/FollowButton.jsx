@@ -2,10 +2,12 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
 
-const FollowButton = ({ userToFollow, followers, setFollowers }) => {
+const FollowButton = ({ userToFollow, followers }) => {
   const [followed, setFollowed] = useState(false);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
+    setCount(followers.length);
     if (followers.includes(userToFollow)) {
       setFollowed(true);
     }
@@ -17,7 +19,7 @@ const FollowButton = ({ userToFollow, followers, setFollowers }) => {
       .then((response) => {
         if (response.status === 200) {
           setFollowed(true);
-          setFollowers((prevFollowers) => [...prevFollowers, userToFollow]);
+          setCount(count + 1);
         }
       })
       .catch((error) => console.error(error));
@@ -29,9 +31,7 @@ const FollowButton = ({ userToFollow, followers, setFollowers }) => {
       .then((response) => {
         if (response.status === 200) {
           setFollowed(false);
-          setFollowers((prevFollowers) =>
-            prevFollowers.filter((follower) => follower !== userToFollow)
-          );
+          setCount(count - 1);
         }
       })
       .catch((error) => console.error(error));
@@ -41,11 +41,11 @@ const FollowButton = ({ userToFollow, followers, setFollowers }) => {
     <div className="d-flex justify-content-center">
       {followed ? (
         <button className="btn btn-danger" onClick={unfollow}>
-          Unfollow
+          Unfollow {count}
         </button>
       ) : (
         <button className="btn btn-primary" onClick={follow}>
-          Follow
+          Follow {count}
         </button>
       )}
     </div>
